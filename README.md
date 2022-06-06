@@ -2,6 +2,10 @@
 
 > Arithmetic Quiz built with `Vue.js`.
 
+## Demo 🚀
+
+You can visualize the demo [here](https://arithmetic-quiz.netlify.app/).
+
 ## Tech
 
 - [Vue.js](https://vuejs.org/)
