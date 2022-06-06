@@ -1,8 +1,12 @@
 <template>
-  <div class="container">
+  <div class="app-wrapper">
     <h1>Arithmetic Quiz</h1>
     <div class="quiz">
-      <component :is="mode" @nextQuestion="handleNextQuestion"></component>
+      <component
+        :is="mode"
+        @nextQuestion="handleNextQuestion"
+        @answerQuestion="handleAnswerQuestion($event)"
+      ></component>
     </div>
   </div>
 </template>
@@ -27,10 +31,53 @@ export default {
     handleNextQuestion() {
       this.mode = "app-question";
     },
+
+    handleAnswerQuestion(isCorrect) {
+      if (isCorrect) {
+        this.mode = "app-answer";
+      } else {
+        this.mode = "app-question";
+        alert("Wrong, try again!");
+      }
+    },
   },
 };
 </script>
 
-<style>
-@import "./assets/css/index.css";
+<style scoped>
+.app-wrapper {
+  margin: auto;
+  width: 90%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+  border: 1px solid var(--gray);
+  border-radius: 8px;
+  padding: 20px 30px;
+}
+
+.app-wrapper h1 {
+  margin-bottom: 20px;
+  font-weight: bold;
+  font-style: italic;
+  font-size: 40px;
+  border-bottom: 1px solid var(--gray);
+  width: 100%;
+  text-align: center;
+  padding-bottom: 30px;
+}
+
+.app-wrapper .quiz {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 375px) {
+  .app-wrapper h1 {
+    font-size: 30px;
+  }
+}
 </style>
