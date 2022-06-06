@@ -38,8 +38,8 @@ export default {
       if (isCorrect) {
         this.mode = "app-answer";
       } else {
-        this.mode = "app-question";
-        alert("Wrong, try again!");
+        // this.mode = "app-question";
+        // alert("Wrong, try again!");
       }
     },
   },

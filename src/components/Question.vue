@@ -5,22 +5,34 @@
     </div>
     <div class="choices">
       <div>
-        <button @click="$emit('answerQuestion', choices[0].isCorrect)">
+        <button
+          :class="choiceClasses(choices[0])"
+          @click="onAnswerClick(choices[0])"
+        >
           {{ choices[0].answer }}
         </button>
       </div>
       <div>
-        <button @click="$emit('answerQuestion', choices[1].isCorrect)">
+        <button
+          :class="choiceClasses(choices[1])"
+          @click="onAnswerClick(choices[1])"
+        >
           {{ choices[1].answer }}
         </button>
       </div>
       <div>
-        <button @click="$emit('answerQuestion', choices[2].isCorrect)">
+        <button
+          :class="choiceClasses(choices[2])"
+          @click="onAnswerClick(choices[2])"
+        >
           {{ choices[2].answer }}
         </button>
       </div>
       <div>
-        <button @click="$emit('answerQuestion', choices[3].isCorrect)">
+        <button
+          :class="choiceClasses(choices[3])"
+          @click="onAnswerClick(choices[3])"
+        >
           {{ choices[3].answer }}
         </button>
       </div>
@@ -39,15 +51,27 @@ export default {
     return {
       question: "",
       choices: [
-        { answer: null, isCorrect: false },
-        { answer: null, isCorrect: false },
-        { answer: null, isCorrect: false },
-        { answer: null, isCorrect: false },
+        { answer: null, isCorrect: false, clicked: false },
+        { answer: null, isCorrect: false, clicked: false },
+        { answer: null, isCorrect: false, clicked: false },
+        { answer: null, isCorrect: false, clicked: false },
       ],
     };
   },
 
   methods: {
+    onAnswerClick(choice) {
+      if (choice.clicked) return;
+
+      choice.clicked = true;
+
+      if (choice.isCorrect) {
+        setTimeout(() => {
+          this.$emit("answerQuestion", choice.isCorrect);
+        }, 1000);
+      }
+    },
+
     generateQuestion() {
       let correctAnswer = 0;
       const firstOperand = this.generateRandomNumber(1, 1000);
@@ -126,6 +150,13 @@ export default {
 
       return randomNumber;
     },
+
+    choiceClasses(choice) {
+      return {
+        incorrect: choice.clicked && !choice.isCorrect,
+        correct: choice.clicked && choice.isCorrect,
+      };
+    },
   },
 
   created() {
@@ -169,5 +200,17 @@ export default {
 .choices > div button {
   margin: 10px;
   padding: 10px 30px;
+}
+
+.correct {
+  background-color: var(--success);
+}
+
+.incorrect {
+  background-color: var(--danger);
+}
+
+.incorrect:hover {
+  cursor: not-allowed;
 }
 </style>
