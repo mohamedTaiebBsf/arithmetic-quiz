@@ -4,6 +4,7 @@
   --primary: #343a40;
   --success: #28a745;
   --danger: #dc3545;
+  --blue: #007bff;
 }
 
 *,
@@ -25,4 +26,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: var(--primary);
+}
+
+button {
+  background-color: var(--blue);
+  color: white;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
 }
