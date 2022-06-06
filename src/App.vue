@@ -2,11 +2,13 @@
   <div class="app-wrapper">
     <h1>Arithmetic Quiz</h1>
     <div class="quiz">
-      <component
-        :is="mode"
-        @nextQuestion="handleNextQuestion"
-        @answerQuestion="handleAnswerQuestion($event)"
-      ></component>
+      <transition name="flip" mode="out-in">
+        <component
+          :is="mode"
+          @nextQuestion="handleNextQuestion"
+          @answerQuestion="handleAnswerQuestion($event)"
+        ></component>
+      </transition>
     </div>
   </div>
 </template>
@@ -73,6 +75,34 @@ export default {
   width: 100%;
   display: flex;
   justify-content: center;
+}
+
+.flip-enter-active {
+  animation: flip-in 0.4s ease-out;
+}
+
+.flip-leave-active {
+  animation: flip-out 0.5s ease-out;
+}
+
+@keyframes flip-in {
+  from {
+    transform: rotateY(90deg);
+  }
+
+  to {
+    transform: rotateY(0deg);
+  }
+}
+
+@keyframes flip-out {
+  from {
+    transform: rotateY(0deg);
+  }
+
+  to {
+    transform: rotateY(90deg);
+  }
 }
 
 @media (max-width: 375px) {
