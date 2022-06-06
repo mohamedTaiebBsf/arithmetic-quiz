@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import { generateRandomNumber } from "../utils";
+
 const MODE_ADDITION = 1;
 const MODE_SUBTRACTION = 2;
 const MODE_MULTIPLICATION = 3;
@@ -67,67 +69,21 @@ export default {
 
       if (choice.isCorrect) {
         setTimeout(() => {
-          this.$emit("answerQuestion", choice.isCorrect);
+          this.$emit("answerQuestion");
         }, 1000);
       }
     },
 
     generateQuestion() {
-      let correctAnswer = 0;
-      const firstOperand = this.generateRandomNumber(1, 1000);
-      const secondOperand = this.generateRandomNumber(1, 1000);
-      const operation = this.generateRandomNumber(1, 4);
+      const operation = generateRandomNumber(1, 4);
+      const correctAnswer = this.formulateQuestion(operation);
 
-      switch (operation) {
-        case MODE_ADDITION:
-          correctAnswer = firstOperand + secondOperand;
-          this.question = `What's ${firstOperand} + ${secondOperand}?`;
-          break;
-        case MODE_SUBTRACTION:
-          correctAnswer = firstOperand - secondOperand;
-          this.question = `What's ${firstOperand} - ${secondOperand}?`;
-          break;
-        case MODE_MULTIPLICATION:
-          correctAnswer = firstOperand * secondOperand;
-          this.question = `What's ${firstOperand} * ${secondOperand}?`;
-          break;
-        case MODE_DIVISION:
-          correctAnswer = (firstOperand / secondOperand).toFixed(2);
-          this.question = `What's ${firstOperand} / ${secondOperand}?`;
-          break;
-        default:
-          correctAnswer = 0;
-          this.question = "Oops, an Error occurred :/";
-      }
+      this.populateChoice(this.choices[0], correctAnswer);
+      this.populateChoice(this.choices[1], correctAnswer);
+      this.populateChoice(this.choices[2], correctAnswer);
+      this.populateChoice(this.choices[3], correctAnswer);
 
-      this.choices[0].answer = this.generateRandomNumber(
-        correctAnswer - 100,
-        correctAnswer + 100,
-        correctAnswer
-      );
-      this.choices[0].isCorrect = false;
-
-      this.choices[1].answer = this.generateRandomNumber(
-        correctAnswer - 100,
-        correctAnswer + 100,
-        correctAnswer
-      );
-      this.choices[1].isCorrect = false;
-
-      this.choices[2].answer = this.generateRandomNumber(
-        correctAnswer - 100,
-        correctAnswer + 100,
-        correctAnswer
-      );
-      this.choices[2].isCorrect = false;
-
-      this.choices[3].answer = this.generateRandomNumber(
-        correctAnswer - 100,
-        correctAnswer + 100,
-        correctAnswer
-      );
-      this.choices[3].isCorrect = false;
-
+      // Set float with 2 decimal digits for division operation;
       if (operation === MODE_DIVISION) {
         this.choices = this.choices.map((choice) => ({
           ...choice,
@@ -135,20 +91,47 @@ export default {
         }));
       }
 
-      const correctChoice = this.generateRandomNumber(0, 3);
-
+      // Populate the correct answer
+      const correctChoice = generateRandomNumber(0, 3);
       this.choices[correctChoice].isCorrect = true;
       this.choices[correctChoice].answer = correctAnswer;
     },
 
-    generateRandomNumber(min, max, except) {
-      const randomNumber = Math.round(Math.random() * (max - min)) + min;
+    formulateQuestion(operation) {
+      const firstOperand = generateRandomNumber(1, 1000);
+      const secondOperand = generateRandomNumber(1, 1000);
 
-      if (randomNumber == except) {
-        return this.generateRandomNumber(min, max, except);
+      switch (operation) {
+        case MODE_ADDITION:
+          this.question = `What's ${firstOperand} + ${secondOperand}?`;
+          return firstOperand + secondOperand;
+
+        case MODE_SUBTRACTION:
+          this.question = `What's ${firstOperand} - ${secondOperand}?`;
+          return firstOperand - secondOperand;
+
+        case MODE_MULTIPLICATION:
+          this.question = `What's ${firstOperand} * ${secondOperand}?`;
+          return firstOperand * secondOperand;
+
+        case MODE_DIVISION:
+          this.question = `What's ${firstOperand} / ${secondOperand}?`;
+          return (firstOperand / secondOperand).toFixed(2);
+
+        default:
+          this.question = "";
+          return 0;
       }
+    },
 
-      return randomNumber;
+    populateChoice(choice, correctAnswer) {
+      choice.answer = generateRandomNumber(
+        correctAnswer - 100,
+        correctAnswer + 100,
+        correctAnswer
+      );
+
+      choice.isCorrect = false;
     },
 
     choiceClasses(choice) {

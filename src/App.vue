@@ -6,7 +6,7 @@
         <component
           :is="mode"
           @nextQuestion="handleNextQuestion"
-          @answerQuestion="handleAnswerQuestion($event)"
+          @answerQuestion="handleAnswerQuestion"
         ></component>
       </transition>
     </div>
@@ -34,13 +34,8 @@ export default {
       this.mode = "app-question";
     },
 
-    handleAnswerQuestion(isCorrect) {
-      if (isCorrect) {
-        this.mode = "app-answer";
-      } else {
-        // this.mode = "app-question";
-        // alert("Wrong, try again!");
-      }
+    handleAnswerQuestion() {
+      this.mode = "app-answer";
     },
   },
 };
